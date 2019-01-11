@@ -9,6 +9,7 @@ module.exports = {
 	entry: {
 		app: './src/index.js',
 		home: './src/views/home/index.js',
+		about: './src/views/about/index.js',
 		index: './src/views/index/index.js'
 	},
 	output: {
@@ -43,7 +44,7 @@ module.exports = {
 			use: ['file-loader']
 		}, {
 			test: /\.pug$/,
-			loader: ['raw-loader', 'pug-html-loader']
+			loader: ['raw-loader', 'pug-html-loader','pug-loader']
 		},{
 			test: /.art$/,
 			use: [ 'art-template-loader' ]
@@ -57,7 +58,7 @@ module.exports = {
 			// Required
 			inject: false,
 			chunks: ['home'],
-			template: require('html-webpack-template-pug'),
+			template: require("html-webpack-template-pug"),
 			filename: 'home.html',
 			// Optional
 			appMountId: 'app',
@@ -79,46 +80,26 @@ module.exports = {
 				body: [
 					'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js',
 					'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
-					{
-						tag: 'div',
-						innerHTML: '12313'
-					}
 				]
 			},
 		}),
 		new HtmlWebpackPlugin({
 			hash: true,
-			chunks: ['index'],
-			title: 'My App2',
+			chunks: ['about'],
+			title: 'My App5136',
 			// Required
 			inject: 'body',
-			template: require('html-webpack-template-pug'),
+			template: "./src/views/about/index.html",
+			filename: 'about.html',
+		}),
+		new HtmlWebpackPlugin({
+			hash: true,
+			chunks: ['index'],
+			title: 'My App56',
+			// Required
+			inject: 'body',
+			template: "./src/views/index/layout.pug",
 			filename: 'index.html',
-			// Optional
-			appMountId: 'app',
-			// appMountId: ['app1', 'app2']
-			mobile: true,
-			injectExtras: {
-				head: [{
-					tag: 'meta',
-					name: 'description',
-					content: 'A description of the page'
-				},
-					"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css",
-					{
-						tag: 'script',
-						href: 'https://unpkg.com/lodash@4.16.6/lodash.js'
-					}
-				],
-				body: [
-					'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js',
-					'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
-					{
-						tag: 'script',
-						innerHTML: artTemplateLoader.compile('<h1>{{ text }}</h1>')
-					}
-				]
-			},
 		})
 	],
 };
