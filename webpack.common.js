@@ -29,9 +29,7 @@ module.exports = {
 			root: '_'//可以通过一个全局变量访问 library（例如，通过 script 标签）。
 		},
 		jquery: {
-			commonjs: 'jquery',//可以将 library 作为一个 CommonJS 模块访问。
-			commonjs2: 'jquery',//和上面的类似，但导出的是 module.exports.default.
-			amd: 'jquery',//类似于 commonjs，但使用 AMD 模块系统。
+			commonjs2: 'jQuery',//和上面的类似，但导出的是 module.exports.default.
 			root: '$'//可以通过一个全局变量访问 library（例如，通过 script 标签）。
 		}
 	},

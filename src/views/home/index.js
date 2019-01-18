@@ -1,7 +1,7 @@
 import './home.less';
 import '../../../static/js/artTemplate'
 import lodash from 'lodash'
-// import $ from 'jquery';
+const $ = require('jquery');
 //
 // console.log($('.content'))
 console.log(lodash)
