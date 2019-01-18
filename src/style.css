@@ -1,4 +1,4 @@
 .hello {
     color: red;
-    background: url('./icon.jpg');
+    background: url('./../static/images/icon.jpg');
 }

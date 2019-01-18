@@ -3,14 +3,19 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const artTemplateLoader =require('art-template')
-
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
+	resolve: {
+		alias: {
+			"@": "static",
+		},
+	},
 	entry: {
 		app: './src/index.js',
 		home: './src/views/home/index.js',
 		about: './src/views/about/index.js',
-		index: './src/views/index/index.js'
+		index: './src/views/index/index.js',
+		vendor: ['art-template/lib/template-web.js']
 	},
 	output: {
 		path: path.resolve(__dirname, "dist"), // string 默认
@@ -23,6 +28,12 @@ module.exports = {
 			commonjs2: 'lodash',//和上面的类似，但导出的是 module.exports.default.
 			amd: 'lodash',//类似于 commonjs，但使用 AMD 模块系统。
 			root: '_'//可以通过一个全局变量访问 library（例如，通过 script 标签）。
+		},
+		jquery: {
+			commonjs: 'jquery',//可以将 library 作为一个 CommonJS 模块访问。
+			commonjs2: 'jquery',//和上面的类似，但导出的是 module.exports.default.
+			amd: 'jquery',//类似于 commonjs，但使用 AMD 模块系统。
+			root: '$'//可以通过一个全局变量访问 library（例如，通过 script 标签）。
 		}
 	},
 	module: {
@@ -40,53 +51,31 @@ module.exports = {
 				use: ['css-loader', 'less-loader']
 			}),
 		}, {
-			test: /\.(png|svg|jpg|gif)$/,
+			test: /\.(svg|jpg|gif)$/,
 			use: ['file-loader']
-		}, {
-			test: /\.pug$/,
-			loader: ['raw-loader', 'pug-html-loader','pug-loader']
-		},{
-			test: /.art$/,
-			use: [ 'art-template-loader' ]
 		}]
 	},
 	plugins: [
 		new CleanWebpackPlugin(['dist']),
 		new ExtractTextPlugin('[name].css'),
+		new CopyWebpackPlugin([ // 复制插件
+			{from: path.join(__dirname, '/static'), to: path.join(__dirname, '/dist/static/')}
+		]),
 		new HtmlWebpackPlugin({
-			title: 'My App',
+			hash: true,
+			chunks: ['home','runtime','vendors~about~app~home~index','default~home~index'],
+			title: 'home',
+			header: '123',
 			// Required
-			inject: false,
-			chunks: ['home'],
-			template: require("html-webpack-template-pug"),
+			inject: 'body',
+			template: "./src/views/home/home.html",
 			filename: 'home.html',
-			// Optional
-			appMountId: 'app',
-			// appMountId: ['app1', 'app2']
-			mobile: true,
-			injectExtras: {
-				head: [
-					{
-						tag: 'meta',
-						name: 'description',
-						content: 'A description of the page'
-					},
-					"https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css",
-					{
-						tag: 'script',
-						href: 'https://unpkg.com/lodash@4.16.6/lodash.js'
-					},
-				],
-				body: [
-					'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js',
-					'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
-				]
-			},
 		}),
 		new HtmlWebpackPlugin({
 			hash: true,
-			chunks: ['about'],
+			chunks: ['about','runtime'],
 			title: 'My App5136',
+			header: '123',
 			// Required
 			inject: 'body',
 			template: "./src/views/about/index.html",
@@ -94,12 +83,37 @@ module.exports = {
 		}),
 		new HtmlWebpackPlugin({
 			hash: true,
-			chunks: ['index'],
-			title: 'My App56',
+			chunks: ['index','runtime'],
+			title: 'webpack',
 			// Required
 			inject: 'body',
-			template: "./src/views/index/layout.pug",
+			template: "./src/views/index/index.html",
 			filename: 'index.html',
 		})
 	],
+	optimization:{
+		splitChunks: {
+			chunks: "all",//插件作用的chunks范围
+			minSize: 30000,//代码块的最小尺寸
+			minChunks: 1,//在分割之前模块的被引用次数
+			maxAsyncRequests: 5,//按需加载最大并行请求数量
+			maxInitialRequests: 3,//一个入口的最大并行请求数量
+			automaticNameDelimiter: '~',//模块名字链接符号'vendors~main.js'
+			name: true,// split 的 chunks name
+			cacheGroups: {//缓存组
+				vendors: {
+					test: /[\\/]node_modules[\\/]/,
+					priority: -10
+				},
+				default: {
+					minChunks: 2,
+					priority: -20,
+					reuseExistingChunk: true
+				}
+			}
+		},
+		runtimeChunk:{
+			name: 'runtime'
+		}
+	},
 };
