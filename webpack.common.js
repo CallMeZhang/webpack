@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -56,14 +55,13 @@ module.exports = {
 		}]
 	},
 	plugins: [
-		new CleanWebpackPlugin(['dist']),
 		new ExtractTextPlugin('[name].css'),
 		new CopyWebpackPlugin([ // 复制插件
 			{from: path.join(__dirname, '/static'), to: path.join(__dirname, '/dist/static/')}
 		]),
 		new HtmlWebpackPlugin({
 			hash: true,
-			chunks: ['home','runtime','vendors~about~app~home~index','default~home~index'],
+			chunks: ['home','runtime','vendors~about~app~home~index~vendor','default~home~index'],
 			title: 'home',
 			header: '123',
 			// Required

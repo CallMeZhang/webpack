@@ -1,7 +1,18 @@
 import './home.less';
 import '../../../static/js/artTemplate'
+import lodash from 'lodash'
+// import $ from 'jquery';
+//
+// console.log($('.content'))
+console.log(lodash)
+console.log($)
+console.log(_)
 function index() {
 	console.log('this is home page')
+
+	return function () {
+		console.log('home')
+	}
 }
 var data = {
 	title: '基本例子',
@@ -11,6 +22,4 @@ var data = {
 };
 var html = template('test', data);
 document.getElementById('content').innerHTML = html;
-window.index2=function () {
-	console.log(123)
-}
+export default index()
