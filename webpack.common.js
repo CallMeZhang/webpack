@@ -10,28 +10,31 @@ module.exports = {
 		},
 	},
 	entry: {
-		app: './src/index.js',
 		home: './src/views/home/index.js',
 		about: './src/views/about/index.js',
+		lazyLoad: './src/views/lazyLoad/lazyLoad.js',
 		index: './src/views/index/index.js',
 		vendor: ['art-template/lib/template-web.js']
 	},
 	output: {
 		path: path.resolve(__dirname, "dist"), // string 默认
-		chunkFilename: '[name].bundle.js',
-		filename: '[name].[chunkhash].js',
+		chunkFilename: '[name].bundle.[chunkhash].js',
+		filename: '[name].[hash].js',
+		// publicPath: "http://cdn.example.com/assets/"
 	},
 	externals: {//从输出的 bundle 中排除依赖 不将lodash打包到bundle中
-		lodash: {
-			commonjs: 'lodash',//可以将 library 作为一个 CommonJS 模块访问。
-			commonjs2: 'lodash',//和上面的类似，但导出的是 module.exports.default.
-			amd: 'lodash',//类似于 commonjs，但使用 AMD 模块系统。
-			root: '_'//可以通过一个全局变量访问 library（例如，通过 script 标签）。
-		},
-		jquery: {
-			commonjs2: 'jQuery',//和上面的类似，但导出的是 module.exports.default.
-			root: '$'//可以通过一个全局变量访问 library（例如，通过 script 标签）。
-		}
+		lodash:'_',
+		// lodash: { //youwenti
+		// 	commonjs: 'lodash',//可以将 library 作为一个 CommonJS 模块访问。
+		// 	commonjs2: 'lodash',//和上面的类似，但导出的是 module.exports.default.
+		// 	amd: 'lodash',//类似于 commonjs，但使用 AMD 模块系统。
+		// 	root: '_'//可以通过一个全局变量访问 library（例如，通过 script 标签）。
+		// },
+		// jquery:'jQuery'
+		// jquery: {
+		// 	commonjs2: 'jQuery',//和上面的类似，但导出的是 module.exports.default.
+		// 	root: '$'//可以通过一个全局变量访问 library（例如，通过 script 标签）。
+		// }
 	},
 	module: {
 		rules: [{
@@ -58,8 +61,16 @@ module.exports = {
 			{from: path.join(__dirname, '/static'), to: path.join(__dirname, '/dist/static/')}
 		]),
 		new HtmlWebpackPlugin({
-			hash: true,
-			chunks: ['home','runtime','vendors~about~app~home~index~vendor','default~home~index'],
+			chunks: ['lazyLoad','runtime','vendors~about~home~index~lazyLoad~vendor'],
+			title: 'lazyLoad',
+			header: '123',
+			// Required
+			inject: 'body',
+			template: "./src/views/lazyLoad/lazyLoad.html",
+			filename: 'lazyLoad.html',
+		}),
+		new HtmlWebpackPlugin({
+			chunks: ['home','runtime','vendors~about~home~index~vendor','default~home~index'],
 			title: 'home',
 			header: '123',
 			// Required
@@ -68,7 +79,6 @@ module.exports = {
 			filename: 'home.html',
 		}),
 		new HtmlWebpackPlugin({
-			hash: true,
 			chunks: ['about','runtime'],
 			title: 'My App5136',
 			header: '123',
@@ -78,8 +88,7 @@ module.exports = {
 			filename: 'about.html',
 		}),
 		new HtmlWebpackPlugin({
-			hash: true,
-			chunks: ['index','runtime'],
+			chunks: ['index','runtime','default~home~index','vendors~about~home~index~vendor'],
 			title: 'webpack',
 			// Required
 			inject: 'body',

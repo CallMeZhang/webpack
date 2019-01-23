@@ -1,7 +1,14 @@
 require('./index.less')
 import '../../../static/js/artTemplate'
+let lodash = require.ensure([],function(require){
+	require('lodash');
+},'lodash')
+lodash.then((_)=>{
+	// isBoolean(false)
+	console.log(_)
+})
 function index() {
-	console.log('this is home page')
+	console.log('this is index page')
 }
 index()
 var data = {

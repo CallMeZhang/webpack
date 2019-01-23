@@ -6,7 +6,7 @@
 </head>
 <body>
 <div>index</div>
-<img src="../../../static/images/icon.jpg" alt="">
+<img id='img' src="../../../static/images/icon.jpg" alt="" onclick="clickfn()">
 <div id="content"></div>
 <script id="test" type="text/html">
     <h1>{{title}}</h1>
@@ -15,6 +15,20 @@
         <li>索引 {{i + 1}} ：{{value}}</li>
         {{/each}}
     </ul>
+</script>
+<script>
+	document.addEventListener('touchend', function (e) {
+		e.preventDefault()
+		newclickFn(e)
+	})
+	function newclickFn(e) {
+		var elem = e.target
+		var event = new CustomEvent('click');
+		elem.dispatchEvent(event)
+	}
+	function clickfn() {
+		console.log('click')
+	}
 </script>
 </body>
 </html>
