@@ -1,5 +1,9 @@
-let f = import(/*webpackChunkName:"lazy-file"*/ './lazy-file.js');
-console.log(f)
+// let f = import(/*webpackChunkName:"lazy-file"*/ './lazy-file.js');
+// console.log(f)
+// require.ensure([], function() {
+// 	let fn = require('./lazy-file.js')
+// 	console.log(fn)
+// },'lazy-file')
 async function getComponent() {
 	let isRequire=false
 	if(isRequire){
