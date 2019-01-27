@@ -4,6 +4,8 @@
 // 	let fn = require('./lazy-file.js')
 // 	console.log(fn)
 // },'lazy-file')
+require('./styl.css')
+require('../stylus/css01.less')
 async function getComponent() {
 	let isRequire=false
 	if(isRequire){

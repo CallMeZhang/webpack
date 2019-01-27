@@ -1,0 +1,15 @@
+botton{
+    font-size: 40px;
+}
+body{
+    background: #0f0;
+    box-sizing: border-box;
+
+}
+p{
+    font-size: 25px;
+}
+div.content{
+    height: 60px;
+    background: url('../../../static/images/icon.jpg');
+}
